@@ -3,7 +3,12 @@ from flask import Flask, render_template,g
 import sqlite3
 app = Flask(__name__)
 
-
+def open_connection():
+    connection = getattr(g,'_database',None)
+    if connection == None:
+        connection = g._connection = sqlite3.connect(PATH)
+    connection.row_factory = sqlite3.Row
+    return connection
  
 @app.route('/')
 @app.route('/jobs')
@@ -13,23 +18,17 @@ def jobs():
 
 PATH = "db/jobs.sqlite"
 
-def open_connection():
-    connection = getattr(g,'_database',None)
-    if connection is None:
-        connection,g._connection = sqlite3.connect(PATH)
-    connection.row_factory = sqlite3.Row
-    return connection
+
 
 def execute_sql(sql, values=(), commit=False,single=False):
     connection = open_connection()
     cursor = connection.exectue(sql,values)
-    if commit is True:
+    if commit == True:
         results = connection.commit()
-    # else:
-    #     if single(cursotr.fetchone()) is True:
-            
+    else:
+         results = cursor.fetchone() if single else cursor.fetchall()         
     cursor.close()
-    return connection
+    return results
 
 
 's assurer que app_context est détruit quand close_connection est appelé'
