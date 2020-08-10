@@ -1,6 +1,9 @@
 import flask
 from flask import Flask, render_template,g
 import sqlite3
+
+PATH = "db/jobs.sqlite"
+
 app = Flask(__name__)
 
 def open_connection():
@@ -15,9 +18,6 @@ def open_connection():
 
 def jobs():
     return render_template('index.html')
-
-PATH = "db/jobs.sqlite"
-
 
 
 def execute_sql(sql, values=(), commit=False,single=False):
