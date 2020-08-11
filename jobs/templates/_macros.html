@@ -3,6 +3,7 @@
   <header class="card-header">
     <p class="card-header-title">
       <a>{{ job['title'] }}</a>
+        <link rel="stylesheet" type="text/css" href={{ url_for('job', job_id=job['id']) }}>
     </p>
   </header>
   <div class="card-content">
